@@ -3,33 +3,50 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>💖 Love Message Terminal 💻</title>
+  <title>💖 Love Message 💌</title>
   <style>
+    /* 🌈 Background and overall feel */
     body {
-      background-color: #0d1117;
-      color: #00ff9c;
+      margin: 0;
+      padding: 0;
       font-family: 'Courier New', monospace;
-      padding: 40px;
-      font-size: 18px;
-    }
-
-    .terminal {
-      background: #161b22;
-      border: 2px solid #30363d;
-      border-radius: 10px;
-      padding: 30px;
-      box-shadow: 0 0 15px rgba(0, 255, 150, 0.3);
-      max-width: 700px;
-      margin: auto;
-      min-height: 300px;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb, #a6c1ee);
+      background-size: 400% 400%;
+      animation: gradientShift 10s ease infinite;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
       overflow: hidden;
     }
 
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* 💻 Terminal box */
+    .terminal {
+      background: rgba(0, 0, 0, 0.5);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 15px;
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+      padding: 30px;
+      max-width: 700px;
+      width: 90%;
+      height: 420px;
+      overflow-y: auto;
+      backdrop-filter: blur(10px);
+    }
+
+    /* 💚 Typing and cursor */
     .cursor {
       display: inline-block;
       width: 10px;
-      background-color: #00ff9c;
-      margin-left: 2px;
+      background-color: #ffb6c1;
+      margin-left: 3px;
       animation: blink 1s infinite;
     }
 
@@ -38,23 +55,42 @@
       51%, 100% { opacity: 0; }
     }
 
+    /* 🌸 Floating hearts */
     .heart {
-      color: #ff4b91;
-      font-size: 22px;
+      position: absolute;
+      color: #ffb6c1;
+      font-size: 24px;
+      animation: float 6s linear infinite;
+      opacity: 0.7;
+    }
+
+    @keyframes float {
+      from { transform: translateY(100vh) scale(1); opacity: 1; }
+      to { transform: translateY(-10vh) scale(0.8); opacity: 0; }
     }
 
     h1 {
       text-align: center;
-      color: #00ff9c;
-      margin-bottom: 20px;
       font-weight: normal;
+      margin-bottom: 20px;
+      color: #ffe1ef;
+      text-shadow: 0 0 10px rgba(255, 192, 203, 0.6);
+    }
+
+    audio {
+      display: none;
     }
   </style>
 </head>
 <body>
 
-  <h1>💻✨ Sending my love message...</h1>
-  <div class="terminal" id="terminal"></div>
+  <div class="terminal" id="terminal">
+    <h1>💻✨ Sending My Love...</h1>
+  </div>
+
+  <audio id="bgMusic" autoplay loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_958ff98694.mp3?filename=romantic-piano-melody-10965.mp3" type="audio/mp3">
+  </audio>
 
   <script>
     const loveMessage = {
@@ -76,10 +112,9 @@
     const terminal = document.getElementById("terminal");
 
     function typeLine(line, callback) {
-      let i = 0;
       const lineElement = document.createElement("div");
       terminal.appendChild(lineElement);
-
+      let i = 0;
       const interval = setInterval(() => {
         if (i < line.length) {
           lineElement.textContent += line[i];
@@ -89,25 +124,36 @@
           lineElement.innerHTML += '<span class="cursor"></span>';
           if (callback) setTimeout(callback, 400);
         }
-      }, 40); // typing speed (milliseconds per character)
+      }, 40);
     }
 
     function showLoveMessage(lines, index = 0) {
       if (index < lines.length) {
         typeLine(lines[index], () => showLoveMessage(lines, index + 1));
       } else {
-        const heart = document.createElement("div");
-        heart.innerHTML = `<br><span class="heart">💖 End of Message 💖</span>`;
-        terminal.appendChild(heart);
+        const heartEnd = document.createElement("div");
+        heartEnd.innerHTML = `<br><span style="color:#ffb6c1;">💖 I love you the most 💖</span>`;
+        terminal.appendChild(heartEnd);
       }
     }
 
-    // Run the animation
+    // Floating hearts animation
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.textContent = "💖";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = 4 + Math.random() * 3 + "s";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 7000);
+    }
+
+    setInterval(createHeart, 800);
+
+    // Run message typing
     const lines = loveMessage.getLines();
     setTimeout(() => showLoveMessage(lines), 1000);
   </script>
 
 </body>
 </html>
-
-
