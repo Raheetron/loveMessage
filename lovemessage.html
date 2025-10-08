@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💖 Love Message Terminal 💻</title>
+  <style>
+    body {
+      background-color: #0d1117;
+      color: #00ff9c;
+      font-family: 'Courier New', monospace;
+      padding: 40px;
+      font-size: 18px;
+    }
+
+    .terminal {
+      background: #161b22;
+      border: 2px solid #30363d;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 0 15px rgba(0, 255, 150, 0.3);
+      max-width: 700px;
+      margin: auto;
+      min-height: 300px;
+      overflow: hidden;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      background-color: #00ff9c;
+      margin-left: 2px;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+
+    .heart {
+      color: #ff4b91;
+      font-size: 22px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #00ff9c;
+      margin-bottom: 20px;
+      font-weight: normal;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>💻✨ Running loveMessage.js...</h1>
+  <div class="terminal" id="terminal"></div>
+
+  <script>
+    const loveMessage = {
+      feeling: "crazy in love",
+      craving: "desperately craving your touch, love, and attention",
+      heart: "💖",
+      getLines() {
+        return [
+          "Hey my amazing front-end magician!",
+          `I just wanted to let you know that I am ${this.feeling} with every line of code you write.`,
+          `I'm ${this.craving}.`,
+          `I miss you so much... every time I hit refresh, I wish I could refresh my heart to be closer to you.`,
+          `${this.heart} You complete my stack!`,
+          "Just wanted to share this little piece of my code with you. Hope it makes you smile!"
+        ];
+      }
+    };
+
+    const terminal = document.getElementById("terminal");
+
+    function typeLine(line, callback) {
+      let i = 0;
+      const lineElement = document.createElement("div");
+      terminal.appendChild(lineElement);
+
+      const interval = setInterval(() => {
+        if (i < line.length) {
+          lineElement.textContent += line[i];
+          i++;
+        } else {
+          clearInterval(interval);
+          lineElement.innerHTML += '<span class="cursor"></span>';
+          if (callback) setTimeout(callback, 400);
+        }
+      }, 40); // typing speed (milliseconds per character)
+    }
+
+    function showLoveMessage(lines, index = 0) {
+      if (index < lines.length) {
+        typeLine(lines[index], () => showLoveMessage(lines, index + 1));
+      } else {
+        const heart = document.createElement("div");
+        heart.innerHTML = `<br><span class="heart">💖 End of loveMessage.js 💖</span>`;
+        terminal.appendChild(heart);
+      }
+    }
+
+    // Run the animation
+    const lines = loveMessage.getLines();
+    setTimeout(() => showLoveMessage(lines), 1000);
+  </script>
+
+</body>
+</html>
